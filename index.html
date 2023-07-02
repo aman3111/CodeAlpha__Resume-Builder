@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Resume Builder</title>
+  <style>
+    body {
+      background-color: white;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .resume-photo {
+      max-width: 200px;
+      max-height: 200px;
+      margin-bottom: 20px;
+    }
+    body {
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="file"] {
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.resume-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resume-container h2 {
+  margin-top: 0;
+}
+
+.resume-output {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+#resumeContainer{
+    background-color: #fdfcfc;
+    margin-top: 5rem;
+    padding: 2rem;
+    margin-left: 25rem;
+    width: 500px;
+    height: 600px;
+    text-align: center;
+    border: 1px black solid;
+    
+}
+
+  </style>
+</head>
+<body>
+  <h1>Resume Builder</h1>
+
+  <div class="section">
+    <h2>Personal Details</h2>
+    <form>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required><br>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required><br>
+
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone" required><br>
+    </form>
+  </div>
+
+  <div class="section">
+    <h2>Education</h2>
+    <form>
+      <label for="degree">Degree:</label>
+      <input type="text" id="degree" name="degree" required><br>
+
+      <label for="university">University:</label>
+      <input type="text" id="university" name="university" required><br>
+
+      <label for="year">Year of Graduation:</label>
+      <input type="number" id="year" name="year" required><br>
+    </form>
+  </div>
+
+  <div class="section">
+    <h2>Experience</h2>
+    <form>
+      <label for="company">Company:</label>
+      <input type="text" id="company" name="company" required><br>
+
+      <label for="position">Position:</label>
+      <input type="text" id="position" name="position" required><br>
+
+      <label for="duration">Duration:</label>
+      <input type="text" id="duration" name="duration" required><br>
+    </form>
+  </div>
+
+  <div class="section">
+    <h2>Upload Photo</h2>
+    <form>
+      <input type="file" id="photo" name="photo" accept="image/*" required><br>
+    </form>
+  </div>
+
+  <button onclick="generateResume()">Generate Resume</button>
+
+  <div id="resumeContainer"></div>
+  <button onclick="downloadResume()">Download Resume</button>
+
+  <script>
+    function generateResume() {
+      // Retrieve values from the form
+      var name = document.getElementById("name").value;
+      var email = document.getElementById("email").value;
+      var phone = document.getElementById("phone").value;
+      var degree = document.getElementById("degree").value;
+      var university = document.getElementById("university").value;
+      var year = document.getElementById("year").value;
+      var company = document.getElementById("company").value;
+      var position = document.getElementById("position").value;
+      var duration = document.getElementById("duration").value;
+
+      // Create the resume output
+      var output = "<h2>Resume</h2>";
+      output += "<h3>Personal Details</h3>";
+      output += "Name: " + name + "<br>";
+      output += "Email: " + email + "<br>";
+      output += "Phone: " + phone + "<br><br>";
+      output += "<h3>Education</h3>";
+      output += "Degree: " + degree + "<br>";
+      output += "University: " + university + "<br>";
+      output += "Year of Graduation: " + year + "<br><br>";
+      output += "<h3>Experience</h3>";
+      output += "Position: " + position + "<br>";
+      output += "Company: " + company + "<br>";
+      output += "Duration: " + duration + "<br>";
+
+      // Get the uploaded photo
+      var photoInput = document.getElementById("photo");
+      if (photoInput.files && photoInput.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          output += "<h3>Photo</h3>";
+          output += "<img class='resume-photo' src='" + e.target.result + "' alt='Resume Photo'>";
+          displayResume(output);
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+      } else {
+        displayResume(output);
+      }
+    }
+
+    function displayResume(output) {
+      // Display the output
+      var resumeContainer = document.getElementById("resumeContainer");
+      resumeContainer.innerHTML = output;
+    }
+
+    function downloadResume() {
+      var resumeOutput = document.getElementById("resumeContainer").innerHTML;
+
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(resumeOutput));
+      element.setAttribute('download', 'resume.html');
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+    }
+  </script>
+</body>
+</html>
